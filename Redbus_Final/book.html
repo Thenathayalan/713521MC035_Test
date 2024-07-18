@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        
+        <title>About us</title>
+        
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <link rel="shortcut icon" href="Assets/redBus_ed.png" style="width: 8px;">
+
+        <style>
+            html, body {
+                height: 100%;
+                margin: 0;
+            }
+            body {
+                background-color: #eaeded;
+            }
+            .navbar {
+                background-color: white;
+            }
+            .dropdown {
+                margin-right: 80px;
+            }
+            .fo_text{
+                text-align: justify;
+                color: #5d6d7e;
+            }
+            a {
+                text-decoration: none;
+                color: #5d6d7e;
+            }
+            .footer {
+                background-color: #eaeded;
+            }
+            .container .col {
+                color: #c63837;
+            }
+            .rounded-pill {
+                border: solid 2px #c63837;
+            }
+            h1 {
+                color: #c63837;
+            }
+            input {
+                outline: none;
+            }
+            .selected {
+                background-color: green;
+                color: white;
+            }
+            .unselected {
+                background-color: gray;
+                color: white;
+            }
+            .button-container {
+                display: flex;
+                flex-wrap: wrap;
+            }
+            .button-container button {
+                margin: 5px;
+            }
+            .btn-dark {
+                background-color: #c63837;
+                border-radius: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+                <div class="container-fluid">
+                    <a class="navbar-brand ms-0 ms-lg-5" href="main.html"><img src="Assets/redbus_inv.png" width="80px"></a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fw-bold">
+                            <li class="nav-item">
+                                <a class="nav-link" href="main.html">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="about.html">About</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Help</a>
+                            </li>
+                            <li class="nav-item dropdown me-lg-6">
+
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
+                              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <li><a class="dropdown-item" href="#">Cancel Ticket</a></li>
+                                <li><a class="dropdown-item" href="#">Change Travel Date</a></li>
+                                <li><a class="dropdown-item" href="#">Show My Ticket</a></li>
+                              </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <div class="container">
+            <h1>Bus Booking</h1>
+            <div class="row justify-content-evenly p-3 border border-dark">
+                <div class="col-sm-12 col-md-4 col-lg-5 mb-3">
+                    <p>Starting city:</p><input id="start" type="text" placeholder="From : " class="rounded-pill"> 
+                </div>
+                <div class="col-sm-12 col-md-4 col-lg-5 mb-3">
+                    <p>Destination city:</p><input id="end" type="text" placeholder="To : " class="rounded-pill"> 
+                </div>
+            </div>
+
+            <div class="mt-5 mb-5 text-center">
+                <p>One User Can Select Upto 5 Seats Only</p>
+            </div>
+            <div class="button-container justify-content-center mt-5 mb-5">
+                <button class="unselected" id="button1">SEAT_1</button>
+                <button class="unselected" id="button2">SEAT_2</button>
+                <button class="unselected" id="button3">SEAT_3</button>
+                <button class="unselected" id="button4">SEAT_4</button>
+                <button class="unselected" id="button5">SEAT_5</button>
+                <button class="unselected" id="button6">SEAT_6</button>
+                <button class="unselected" id="button7">SEAT_7</button>
+                <button class="unselected" id="button8">SEAT_8</button>
+                <button class="unselected" id="button9">SEAT_9</button>
+                <button class="unselected" id="button10">SEAT_0</button>
+            </div>
+
+            <div class="row text-center mb-5">
+                <span><button class="btn btn-dark" id="submit">Book Ticket</button></span>
+            </div>
+            
+            <div id="output"></div>
+        </div>
+        
+        <p id="details"></p>
+
+        <script>
+            const maxSelections = 5;
+            const buttons = document.querySelectorAll('.button-container button');
+            const outputDiv = document.getElementById('output');
+            let selectedCount = 0;                      
+
+            function getQueryParams() {
+                const params = new URLSearchParams(window.location.search);
+                return {
+                    from: params.get('from'),
+                    to: params.get('to')
+                };
+            }
+    
+            const { from, to } = getQueryParams();
+
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    if (this.classList.contains('unselected') && selectedCount < maxSelections) {
+                        this.classList.remove('unselected');
+                        this.classList.add('selected');
+                        selectedCount++;
+                    } else if (this.classList.contains('selected')) {
+                        this.classList.remove('selected');
+                        this.classList.add('unselected');
+                        selectedCount--;
+                    }
+                });
+            });
+
+            document.getElementById('start').value = `${from}`;
+            document.getElementById('end').value = `${to}`;
+            document.getElementById('submit').addEventListener('click', function() {
+                const selectedButtons = Array.from(buttons).filter(button => button.classList.contains('selected')).map(button => button.textContent);
+                outputDiv.textContent = `Tickets Booked : ${selectedButtons.join(', ')}`;
+            });
+
+        </script>
+
+        <footer>
+            <div class="container-fluid mt-5 footer">
+                <div class="row justify-content-evenly align-items-center">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-3">
+                        <img src="Assets/redbus_inv.png" class="row img-fluid mx-auto d-none d-lg-flex" style="width: 120px;">
+                        <p class="row fo_text">redBus is the world's largest online bus ticket booking service trusted by over 25 million happy customers globally. redBus offers bus ticket booking through its website, iOS and Android mobile apps for all major routes.</p>
+                    </div>
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-2">
+                        <h1 class="row fs-4 fw-bold">About redBus</h1>
+                        <a class="row" href="#">About us</a>
+                        <a class="row" href="#">Investor Relations</a>
+                        <a class="row" href="#">Contact us</a>
+                    </div>
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-2">
+                        <h1 class="row fs-4 fw-bold">Global Sites</h1>
+                        <a class="row" href="#">India</a>
+                        <a class="row" href="#">Singapore</a>
+                        <a class="row" href="#">Malaysia</a>
+                    </div>
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-2">
+                        <h1 class="row fs-4 fw-bold">Our Partners</h1>
+                        <a class="row" href="#">Goibibo Bus</a>
+                        <a class="row" href="#">Goibibo Hotels</a>
+                        <a class="row" href="#">Makemytrip Hotels</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>
